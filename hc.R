@@ -74,24 +74,14 @@ hc = function(d)
     d[i] = Inf
   }
 # This is the end of the clustering part.
+# The next order step is only needed to plot.
   o = iorder(m)
+# Return something similar to the output from hclust.
   structure(list(merge = m, height = h, order = o,
         labels = rownames(d), method = "single", 
         call = match.call(), dist.method = "euclidean"), 
         class = "hclust")
 }
-
-# Recursively tally the tree depth at level i for hclust object h.
-depth = function(h,i)
-{
-  m = h$merge
-  j = 1
-  if(all(m[i,]<0)) return(j)
-  if(m[i,1]>0) j = j + depth(h,m[i,1])
-  if(m[i,2]>0) j = j + depth(h,m[i,2])
-  j
-}
-
 
 # Compare!
 h = hclust(dist(USArrests),method="single")
