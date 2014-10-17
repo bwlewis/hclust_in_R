@@ -64,10 +64,13 @@ hc = function(d)
       p = n[i[1,]]
       p = p[order(abs(p))]
       m[j,] = p
+# Agglomerate this tuple and all previous groups they belong to
+# into the current jth group:
       grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
       n[grp] = j
       j = j + 1
     }
+# Move on to the next minimum by excluding current one
     d[i] = Inf
   }
 # This is the end of the clustering part.
