@@ -57,8 +57,7 @@ hc = function(d, method=c("single","complete","average","median"))
   n = -(1:N)                       # Tracks group membership
   m = matrix(0,nrow=N-1, ncol=2)   # hclust merge output
   h = rep(0,N-1)                   # hclust height output
-  j = 1
-  while(j<N)
+  for(j in seq(1,N-1))
   {
 # Find smallest distance and corresponding indices
     h[j] = min(d)
@@ -74,7 +73,6 @@ hc = function(d, method=c("single","complete","average","median"))
 # into the current jth group:
     grp = c(i, which(n %in% n[i[1,n[i]>0]]))
     n[grp] = j
-    j = j + 1
 # Concoct replacement distances that consolidate our pair using `method`:
     r = apply(d[i,],2,method_fn)
 # Move on to the next minimum distance, excluding current one by modifying
@@ -98,8 +96,8 @@ hc = function(d, method=c("single","complete","average","median"))
 #plot(h1)
 
 # A more numerically challenging example
-#i=seq(1,by=3,length.out=50)
-#x=as.matrix(iris[i,1:4])
-#h=hclust(dist(x),method="single")
-#h1=hc(dist(x),method="single")
-#print(cbind(h$merge[1:22,],h1$merge[1:22,]))
+i=seq(1,by=3,length.out=50)
+x=as.matrix(iris[i,1:4])
+h=hclust(dist(x),method="single")
+h1=hc(dist(x),method="single")
+print(cbind(h$merge[1:22,],h1$merge[1:22,]))
