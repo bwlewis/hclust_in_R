@@ -2,7 +2,7 @@ hclust_in_R
 ===========
 
 This is a basic implementation of single linkage hierarchical clustering
-written only in R.  It produces output structured like the output from R's
+written in R.  It produces output structured like the output from R's
 built in `hclust` function in the stats package.
 
 I wrote these functions for my own use to help me understand how a basic
@@ -10,7 +10,7 @@ hierarchical clustering method might be implemented. It's very short and easy
 to experiment with, and I think it could easily be extended to other variations
 on hierarchical clustering.
 
-This implementation is far less efficient than R's `hclust` (written in
+This implementation is less efficient than R's `hclust` (written in
 Fortan), both in terms of memory use and performance. But it's easy to read and
 experiment with.
 
