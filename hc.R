@@ -96,6 +96,6 @@ hc = function(d, method=c("single","complete","average","median"))
 
 # Compare!
 h = hclust(dist(USArrests),method="single")
-h1 = hc(dis(USArrests))
+h1 = hc(dis(USArrests), method="single")
 plot(h)
 plot(h1)
