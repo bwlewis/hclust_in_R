@@ -63,19 +63,15 @@ hc = function(d, method=c("single","complete","average","median"))
 # Find smallest distance and corresponding indices
     h[j] = min(d)
     i = which(d==h[j], arr.ind=TRUE)
-# If not already assigned to the same group, then...
-    if(diff(n[i[1,]])!=0)
-    {
 # R's convention is to order each m[j,] pair as follows:
-      p = n[i[1,]]
-      p = p[order(abs(p))]
-      m[j,] = p
+    p = n[i[1,]]
+    p = p[order(abs(p))]
+    m[j,] = p
 # Agglomerate this pair and all previous groups they belong to
 # into the current jth group:
-      grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
-      n[grp] = j
-      j = j + 1
-    }
+    grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
+    n[grp] = j
+    j = j + 1
 # Concoct replacement distances that consolidate our pair using `method`:
     r = apply(d[i[1,],],2,method)
 # Move on to the next minimum distance, excluding current one by modifying
