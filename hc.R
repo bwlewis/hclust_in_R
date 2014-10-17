@@ -11,7 +11,7 @@ dis = function(x)
 # The following ordering function for the hclust plot is translated from the
 # original Fortran code used by R in hclust.f. It's only needed by the plotting
 # routine to avoid crossing connections.
-corder = function(m)
+iorder = function(m)
 {
   N = nrow(m) + 1
   iorder = rep(0,N)
@@ -71,7 +71,7 @@ hc = function(d)
     d[i] = Inf
   }
 # This is the end of the clustering part.
-  o = corder(m)
+  o = iorder(m)
   structure(list(merge = m, height = h, order = o,
         labels = rownames(d), method = "single", 
         call = match.call(), dist.method = "euclidean"), 

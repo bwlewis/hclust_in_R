@@ -11,8 +11,8 @@ to experiment with, and I think it could easily be extended to other variations
 on hierarchical clustering.
 
 This implementation is far less efficient than R's `hclust` (written in
-Fotran), both in terms of memory use and performance. But it's easy to read and
-play with this as example code.
+Fortan), both in terms of memory use and performance. But it's easy to read and
+experiment with.
 
 The clustering method is very short and proceeds somewhat differently than R's
 default method, but produces output compatible with the functions associated
