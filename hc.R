@@ -47,18 +47,17 @@ hc = function(d, method=c("single","complete","average","median"))
 {
   if(!is.matrix(d)) d = as.matrix(d)
 # Pick a clustering function:
-  method = switch(match.arg(method),
-                    single   = min,
-                    complete = max,
-                    average  = mean,
-                    median  = median)
+  method_fn = switch(match.arg(method),
+                      single   = min,
+                      complete = max,
+                      average  = mean,
+                      median  = median)
   N = nrow(d)
   diag(d)=Inf
   n = -(1:N)                       # Tracks group membership
   m = matrix(0,nrow=N-1, ncol=2)   # hclust merge output
   h = rep(0,N-1)                   # hclust height output
-  j = 1
-  while(j<N)
+  for(j in seq(1,N-1))
   {
 # Find smallest distance and corresponding indices
     h[j] = min(d)
@@ -71,21 +70,17 @@ hc = function(d, method=c("single","complete","average","median"))
 # into the current jth group:
     grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
     n[grp] = j
-    j = j + 1
 # Concoct replacement distances that consolidate our pair using `method`:
-    r = apply(d[i[1,],],2,method)
+    r = apply(d[i[1,],],2,method_fn)
 # Move on to the next minimum distance, excluding current one by modifying
 # the distance matrix:
     d[min(i),] = d[,min(i)] = r
+    d[min(i),min(i)]        = Inf
     d[max(i),] = d[,max(i)] = Inf
-    d[min(i),min(i)] = Inf
   }
-# This is the end of the clustering part.
-# The next order step is only needed to plot.
-  o = iorder(m)
 # Return something similar to the output from hclust.
-  structure(list(merge = m, height = h, order = o,
-        labels = rownames(d), method = "single", 
+  structure(list(merge = m, height = h, order = iorder(m),
+        labels = rownames(d), method = method, 
         call = match.call(), dist.method = "euclidean"), 
         class = "hclust")
 }
