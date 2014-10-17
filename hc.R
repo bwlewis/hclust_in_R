@@ -10,7 +10,7 @@ dis = function(x)
 
 # The following ordering function for the hclust plot is translated from the
 # original Fortran code used by R in hclust.f. It's only needed by the plotting
-# routine to avoid crossing connections.
+# routine to avoid crossing connections. This translation is really really slow.
 iorder = function(m)
 {
   N = nrow(m) + 1
@@ -53,23 +53,32 @@ hc = function(d, method=c("single","complete","average","median"))
                       average  = mean,
                       median  = median)
   N = nrow(d)
+  eps = 10*.Machine$double.eps
   diag(d)=Inf
   n = -(1:N)                       # Tracks group membership
   m = matrix(0,nrow=N-1, ncol=2)   # hclust merge output
   h = rep(0,N-1)                   # hclust height output
-  for(j in seq(1,N-1))
+  j = 1
+  while(j<N)
   {
 # Find smallest distance and corresponding indices
     h[j] = min(d)
-    i = which(d==h[j], arr.ind=TRUE)
-# R's convention is to order each m[j,] pair as follows:
+    i = which(abs(d-h[j])<eps, arr.ind=TRUE)
+# There are some interesting numerical issues here, I think from denormalized
+# fp values...  The following comparsison is typically not a good idea, but...
+    w = which((d[i] - h[j])==0)
+    if(length(w)>0) i = i[w,]
+# Explain the above a little bit better...better way to work this out?
+    i = i[1,,drop=FALSE]
     p = n[i[1,]]
-    p = p[order(abs(p))]
+# R's convention is to order each m[j,] pair as follows:
+    p = p[order(p)]
     m[j,] = p
 # Agglomerate this pair and all previous groups they belong to
 # into the current jth group:
     grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
     n[grp] = j
+    j = j + 1
 # Concoct replacement distances that consolidate our pair using `method`:
     r = apply(d[i[1,],],2,method_fn)
 # Move on to the next minimum distance, excluding current one by modifying
@@ -79,6 +88,7 @@ hc = function(d, method=c("single","complete","average","median"))
     d[max(i),] = d[,max(i)] = Inf
   }
 # Return something similar to the output from hclust.
+  
   structure(list(merge = m, height = h, order = iorder(m),
         labels = rownames(d), method = method, 
         call = match.call(), dist.method = "euclidean"), 
@@ -86,7 +96,15 @@ hc = function(d, method=c("single","complete","average","median"))
 }
 
 # Compare!
-h = hclust(dist(USArrests),method="single")
-h1 = hc(dis(USArrests), method="single")
-plot(h)
-plot(h1)
+#h = hclust(dist(USArrests),method="single")
+#h1 = hc(dis(USArrests), method="single")
+#plot(h)
+#plot(h1)
+
+# The next example illustrates some quite interesting numerical issues with
+# the above approach (see the comments in-line above).
+#i=seq(1,by=3,length.out=50)
+#x=as.matrix(iris[i,1:4])
+#h=hclust(dist(x),method="single")
+#h1=hc(dist(x),method="single")
+#print(cbind(h$merge[1:22,],h1$merge[1:22,]))
