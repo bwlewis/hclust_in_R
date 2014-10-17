@@ -53,7 +53,6 @@ hc = function(d, method=c("single","complete","average","median"))
                       average  = mean,
                       median  = median)
   N = nrow(d)
-  eps = 10*.Machine$double.eps
   diag(d)=Inf
   n = -(1:N)                       # Tracks group membership
   m = matrix(0,nrow=N-1, ncol=2)   # hclust merge output
@@ -63,12 +62,9 @@ hc = function(d, method=c("single","complete","average","median"))
   {
 # Find smallest distance and corresponding indices
     h[j] = min(d)
-    i = which(abs(d-h[j])<eps, arr.ind=TRUE)
-# There are some interesting numerical issues here, I think from denormalized
-# fp values...  The following comparsison is typically not a good idea, but...
-    w = which((d[i] - h[j])==0)
-    if(length(w)>0) i = i[w,]
-# Explain the above a little bit better...better way to work this out?
+# We can use == here (I think) because we know we'll get exactly a 0 value.
+    i = which(d - h[j] == 0, arr.ind=TRUE)
+# We could get more than one, but we just want to merge one pair, so take 1st.
     i = i[1,,drop=FALSE]
     p = n[i[1,]]
 # R's convention is to order each m[j,] pair as follows:
@@ -101,8 +97,7 @@ hc = function(d, method=c("single","complete","average","median"))
 #plot(h)
 #plot(h1)
 
-# The next example illustrates some quite interesting numerical issues with
-# the above approach (see the comments in-line above).
+# A more challenging example
 #i=seq(1,by=3,length.out=50)
 #x=as.matrix(iris[i,1:4])
 #h=hclust(dist(x),method="single")
