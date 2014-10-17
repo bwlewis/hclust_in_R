@@ -66,17 +66,17 @@ hc = function(d, method=c("single","complete","average","median"))
     i = which(d - h[j] == 0, arr.ind=TRUE)
 # We could get more than one, but we just want to merge one pair, so take 1st.
     i = i[1,,drop=FALSE]
-    p = n[i[1,]]
+    p = n[i]
 # R's convention is to order each m[j,] pair as follows:
     p = p[order(p)]
     m[j,] = p
 # Agglomerate this pair and all previous groups they belong to
 # into the current jth group:
-    grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
+    grp = c(i, which(n %in% n[i[1,n[i]>0]]))
     n[grp] = j
     j = j + 1
 # Concoct replacement distances that consolidate our pair using `method`:
-    r = apply(d[i[1,],],2,method_fn)
+    r = apply(d[i,],2,method_fn)
 # Move on to the next minimum distance, excluding current one by modifying
 # the distance matrix:
     d[min(i),] = d[,min(i)] = r
