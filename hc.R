@@ -76,9 +76,10 @@ hc = function(d, method=c("single","complete","average","median"))
       n[grp] = j
       j = j + 1
     }
-# Concoct a replacement row that consolidates our pair using `method`:
+# Concoct replacement distances that consolidate our pair using `method`:
     r = apply(d[i[1,],],2,method)
-# Move on to the next minimum distance, excluding current one
+# Move on to the next minimum distance, excluding current one by modifying
+# the distance matrix:
     d[min(i),] = d[,min(i)] = r
     d[max(i),] = d[,max(i)] = Inf
     d[min(i),min(i)] = Inf
