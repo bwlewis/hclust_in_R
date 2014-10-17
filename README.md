@@ -1,9 +1,9 @@
 hclust_in_R
 ===========
 
-This is a basic implementation of single linkage hierarchical clustering
-written in R.  It produces output structured like the output from R's
-built in `hclust` function in the stats package.
+This is a basic implementation of hierarchical clustering written in R.  It
+produces output structured like the output from R's built in `hclust` function
+in the stats package.
 
 I wrote these functions for my own use to help me understand how a basic
 hierarchical clustering method might be implemented. It's very short and easy
@@ -36,7 +36,7 @@ Try this:
 ```R
 source("hc.R")
 h  = hclust(USArrests, "single")    # standard method
-h1 = hc(USArrests)                  # our example method
+h1 = hc(USArrests, "single")        # our example method
 ```
 And compare:
 ```

@@ -41,11 +41,17 @@ iorder = function(m)
   -iorder
 }
 
-# A simple pure-R single-linkage hierarchical clustering implementation. Can
-# be used like hclust(d, "single").
-hc = function(d)
+# A really simple pure-R hierarchical clustering implementation. Can
+# be used like hclust(d, method).
+hc = function(d, method=c("single","complete","average","median"))
 {
   if(!is.matrix(d)) d = as.matrix(d)
+# Pick a clustering function:
+  method = switch(match.arg(method),
+                    single   = min,
+                    complete = max,
+                    average  = mean,
+                    median  = median)
   N = nrow(d)
   diag(d)=Inf
   n = -(1:N)                       # Tracks group membership
@@ -70,8 +76,9 @@ hc = function(d)
       n[grp] = j
       j = j + 1
     }
-# Move on to the next minimum by excluding current one
-    r = apply(d[i[1,],],2,min) # replacement row
+# Concoct a replacement row that consolidates our pair using `method`:
+    r = apply(d[i[1,],],2,method)
+# Move on to the next minimum distance, excluding current one
     d[min(i),] = d[,min(i)] = r
     d[max(i),] = d[,max(i)] = Inf
     d[min(i),min(i)] = Inf
