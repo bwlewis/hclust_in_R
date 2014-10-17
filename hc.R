@@ -60,11 +60,11 @@ hc = function(d)
 # If not already assigned to the same group, then...
     if(diff(n[i[1,]])!=0)
     {
-# R's convention is to order each m[j,] tuple as follows:
+# R's convention is to order each m[j,] pair as follows:
       p = n[i[1,]]
       p = p[order(abs(p))]
       m[j,] = p
-# Agglomerate this tuple and all previous groups they belong to
+# Agglomerate this pair and all previous groups they belong to
 # into the current jth group:
       grp = c(i[1,], which(n %in% n[i[1,n[i[1,]]>0]]))
       n[grp] = j
