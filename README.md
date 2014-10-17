@@ -28,11 +28,13 @@ Try this:
 source("hc.R")
 h  = hclust(USArrests, "single")    # standard method
 h1 = hc(USArrests)                  # our example method
-
-# compare:
+```
+And compare:
+```
 plot(h)
-plot(h1)
 ```
 <img alt="h.jpg" src="h.jpg"/>
-<br/>
+```
+plot(h1)
+```
 <img alt="h1.jpg" src="h1.jpg"/>
