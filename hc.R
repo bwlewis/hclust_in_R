@@ -71,7 +71,10 @@ hc = function(d)
       j = j + 1
     }
 # Move on to the next minimum by excluding current one
-    d[i] = Inf
+    r = apply(d[i[1,],],2,min) # replacement row
+    d[min(i),] = d[,min(i)] = r
+    d[max(i),] = d[,max(i)] = Inf
+    d[min(i),min(i)] = Inf
   }
 # This is the end of the clustering part.
 # The next order step is only needed to plot.
