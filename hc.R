@@ -97,7 +97,7 @@ hc = function(d, method=c("single","complete","average","median"))
 #plot(h)
 #plot(h1)
 
-# A more challenging example
+# A more numerically challenging example
 #i=seq(1,by=3,length.out=50)
 #x=as.matrix(iris[i,1:4])
 #h=hclust(dist(x),method="single")
